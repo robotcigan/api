@@ -11,11 +11,13 @@ const artistSchema = mongoose.Schema({
   description: { type: String, required: true }
 });
 
+// Export
 const Artist = module.exports = mongoose.model('Artist', artistSchema);
 
 // Get all artists
-module.exports.getArtists = () => {
-  return Artist.find();
+module.exports.getArtists = (skip, limit) => {
+  // return Artist.find();
+  return Artist.find().skip(skip).limit(limit);
 };
 
 // Get one artist
@@ -36,5 +38,14 @@ module.exports.editArtist = (id, artist) => {
 // Remove artist
 module.exports.removeArtist = (id) => {
   return Artist.findOneAndRemove({_id: id});
-}
+};
+
+// Search artists
+module.exports.searchArtists = (name) => {
+  return Artist.find({
+    "name": {
+      $regex: new RegExp(name,'i')
+    }
+  });
+};
 

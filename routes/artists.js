@@ -9,9 +9,12 @@ router.get('/', (req, res) => {
   res.send('Hello world');
 });
 
-// All aritsts
+// All aritsts with pagination parameters
 router.get('/artists', (req, res) => {
-  Artist.getArtists()
+  let skip = 5;
+  let limit = 5;
+  let page = req.param('page');
+  Artist.getArtists(page * skip, limit)
     .then(artists => {
       res.send({ artists: artists});
     })
@@ -53,6 +56,15 @@ router.delete('/artist/:id', (req, res) => {
     .then(() => {
       res.send(200);
       console.log('artist was successfully removed');
+    })
+    .catch(err => next(err));
+});
+
+// Searching artists
+router.get('/artist/search/:name', (req, res) => {
+  Artist.searchArtists(req.params.name)
+    .then(artists => {
+      res.send({ artists: artists });
     })
     .catch(err => next(err));
 });
