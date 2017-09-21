@@ -3,6 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
+const ArtistsCtrl = require('../controllers/artists-ctrl');
+
 const Artist = require('../models/artist');
 
 router.get('/', (req, res) => {
@@ -10,16 +12,7 @@ router.get('/', (req, res) => {
 });
 
 // All aritsts with pagination parameters
-router.get('/artists', (req, res) => {
-  let skip = 5;
-  let limit = 5;
-  let page = req.param('page');
-  Artist.getArtists(page * skip, limit)
-    .then(artists => {
-      res.send({ artists: artists});
-    })
-    .catch(err => next(err));
-});
+router.get('/artists', ArtistsCtrl.getArtists.bind(ArtistsCtrl));
 
 // One artist
 router.get('/artist/:id', (req, res) => {
